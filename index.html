@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR.js - Proyecto de Prueba</title>
+    
+    <!-- AR.js y A-Frame -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .overlay h3 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+        }
+        
+        .instructions {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        .marker-link {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .marker-link:hover {
+            text-decoration: underline;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 2000;
+            text-align: center;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 10px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de carga -->
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Inicializando cámara AR...</p>
+    </div>
+    
+    <!-- Información del estado -->
+    <div class="overlay">
+        <h3>🎯 AR.js Demo</h3>
+        <p id="status">Inicializando...</p>
+        <p><strong>Marcadores detectados:</strong> <span id="markerCount">0</span></p>
+    </div>
+    
+    <!-- Instrucciones -->
+    <div class="instructions">
+        <p><strong>📋 Instrucciones:</strong></p>
+        <p>1. Permite el acceso a la cámara cuando se solicite</p>
+        <p>2. Apunta la cámara hacia el 
+            <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" 
+               target="_blank" class="marker-link">marcador Hiro</a>
+        </p>
+        <p>3. ¡Verás aparecer un cubo 3D animado!</p>
+    </div>
+    
+    <!-- Escena AR -->
+    <a-scene
+        vr-mode-ui="enabled: false"
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        renderer="logarithmicDepthBuffer: true;"
+        embedded
+        loading-screen="enabled: false">
+        
+        <!-- Recursos -->
+        <a-assets>
+            <!-- Puedes agregar texturas aquí si las necesitas -->
+        </a-assets>
+        
+        <!-- Marcador AR -->
+        <a-marker
+            id="hiro-marker"
+            preset="hiro"
+            size="1"
+            smooth="true"
+            smoothCount="10"
+            smoothTolerance="0.01"
+            smoothThreshold="5"
+            raycaster="objects: .clickable"
+            emitevents="true"
+            cursor="fuse: false; rayOrigin: mouse;">
+            
+            <!-- Cubo principal con animación -->
+            <a-box
+                position="0 0.5 0"
+                rotation="0 45 0"
+                color="#4CAF50"
+                shadow="cast: true"
+                animation="property: rotation; to: 0 405 0; loop: true; dur: 4000; easing: linear">
+                
+                <!-- Cubo interior que rota en dirección opuesta -->
+                <a-box
+                    position="0 0 0"
+                    scale="0.5 0.5 0.5"
+                    color="#FF5722"
+                    animation="property: rotation; to: 0 -405 0; loop: true; dur: 2000; easing: linear">
+                </a-box>
+            </a-box>
+            
+            <!-- Texto flotante -->
+            <a-text
+                value="¡AR.js funciona!"
+                position="0 1.5 0"
+                align="center"
+                color="#FFFFFF"
+                scale="2 2 2"
+                animation="property: position; to: 0 2 0; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine;">
+            </a-text>
+            
+            <!-- Cilindro de base -->
+            <a-cylinder
+                position="0 0 0"
+                radius="0.8"
+                height="0.1"
+                color="#2196F3"
+                shadow="receive: true">
+            </a-cylinder>
+            
+            <!-- Esferas orbitando -->
+            <a-sphere
+                position="1.2 0.5 0"
+                radius="0.1"
+                color="#FFEB3B"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 3000; easing: linear"
+                animation__orbit="property: object3D.position.x; to: -1.2; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine">
+            </a-sphere>
+            
+            <a-sphere
+                position="0 0.5 1.2"
+                radius="0.1"
+                color="#E91E63"
+                animation="property: rotation; to: 360 0 0; loop: true; dur: 2500; easing: linear"
+                animation__orbit="property: object3D.position.z; to: -1.2; dir: alternate; dur: 2500; loop: true; easing: easeInOutSine">
+            </a-sphere>
+        </a-marker>
+        
+        <!-- Cámara -->
+        <a-entity camera></a-entity>
+    </a-scene>
+    
+    <script>
+        // Variables globales
+        let markerVisible = false;
+        let markerCount = 0;
+        
+        // Elementos del DOM
+        const statusElement = document.getElementById('status');
+        const markerCountElement = document.getElementById('markerCount');
+        const loadingElement = document.getElementById('loading');
+        
+        // Esperar a que AR.js esté listo
+        window.addEventListener('load', function() {
+            const scene = document.querySelector('a-scene');
+            const marker = document.querySelector('#hiro-marker');
+            
+            // Ocultar pantalla de carga cuando la escena esté lista
+            scene.addEventListener('renderstart', function() {
+                setTimeout(() => {
+                    loadingElement.classList.add('hidden');
+                    statusElement.textContent = 'Cámara lista - Busca el marcador Hiro';
+                }, 1000);
+            });
+            
+            // Eventos del marcador
+            marker.addEventListener('markerFound', function() {
+                markerVisible = true;
+                markerCount++;
+                updateStatus();
+                console.log('✅ Marcador detectado!');
+                
+                // Efecto de sonido simulado (puedes agregar audio real)
+                navigator.vibrate && navigator.vibrate(100);
+            });
+            
+            marker.addEventListener('markerLost', function() {
+                markerVisible = false;
+                updateStatus();
+                console.log('❌ Marcador perdido');
+            });
+            
+            // Manejar errores de cámara
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    console.log('✅ Acceso a cámara concedido');
+                    // Detener el stream ya que AR.js manejará la cámara
+                    stream.getTracks().forEach(track => track.stop());
+                })
+                .catch(function(error) {
+                    console.error('❌ Error de acceso a cámara:', error);
+                    statusElement.textContent = 'Error: No se pudo acceder a la cámara';
+                    statusElement.style.color = '#f44336';
+                });
+        });
+        
+        // Actualizar estado de la UI
+        function updateStatus() {
+            if (markerVisible) {
+                statusElement.textContent = '🎯 Marcador detectado - ¡Perfecto!';
+                statusElement.style.color = '#4CAF50';
+            } else {
+                statusElement.textContent = '👀 Buscando marcador...';
+                statusElement.style.color = '#FF9800';
+            }
+            markerCountElement.textContent = markerCount;
+        }
+        
+        // Información de debug (opcional)
+        console.log('🚀 AR.js Demo iniciado');
+        console.log('📱 Dispositivo:', navigator.userAgent);
+        console.log('🌐 URL del marcador Hiro: https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png');
+        
+        // Prevenir zoom en dispositivos móviles
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+        
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>

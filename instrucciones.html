@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instrucciones AR.js</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+        .step {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .url-box {
+            background: #000;
+            color: #4CAF50;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 18px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .marker-img {
+            max-width: 200px;
+            border: 3px solid white;
+            border-radius: 10px;
+            display: block;
+            margin: 20px auto;
+        }
+        .warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left: 4px solid #FF9800;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .qr-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 AR.js - Instrucciones de Acceso</h1>
+        
+        <div class="step">
+            <h3>📱 Paso 1: Conectar desde tu celular</h3>
+            <p>Asegúrate de que tu celular esté conectado a la <strong>misma red Wi-Fi</strong> que esta computadora.</p>
+            <p>Luego, abre el navegador en tu celular y ve a:</p>
+            <div class="url-box">
+                http://192.168.0.12:8080
+            </div>
+        </div>
+        
+        <div class="step">
+            <h3>📷 Paso 2: Permisos de cámara</h3>
+            <p>Cuando el navegador te solicite permisos para acceder a la cámara, <strong>acepta</strong>.</p>
+        </div>
+        
+        <div class="warning">
+            <h3>⚠️ Importante para Chrome en Android</h3>
+            <p>Si estás usando Chrome en Android y la cámara no funciona, es porque Chrome requiere HTTPS para acceder a la cámara por seguridad.</p>
+            <p><strong>Soluciones:</strong></p>
+            <ul>
+                <li>Usa <strong>Firefox</strong> en Android (funciona mejor con HTTP)</li>
+                <li>O prueba con la versión web en GitHub Pages (HTTPS)</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h3>🎯 Paso 3: Usar el marcador Hiro</h3>
+            <p>Necesitas el <strong>marcador Hiro</strong> para que funcione la AR. Puedes:</p>
+            <ul>
+                <li>Descargarlo desde: <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" target="_blank">aquí</a></li>
+                <li>Imprimirlo en papel</li>
+                <li>Mostrarlo en otra pantalla</li>
+            </ul>
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" 
+                 alt="Marcador Hiro" class="marker-img">
+        </div>
+        
+        <div class="step">
+            <h3>🎮 Paso 4: ¡Prueba la AR!</h3>
+            <p>Apunta la cámara hacia el marcador Hiro y verás aparecer:</p>
+            <ul>
+                <li>🟢 Un cubo verde que rota</li>
+                <li>🔴 Un cubo rojo interior</li>
+                <li>📝 Texto flotante</li>
+                <li>🟡 Esferas orbitando</li>
+                <li>🔵 Una base azul</li>
+            </ul>
+        </div>
+        
+        <div class="success">
+            <h3>✅ Consejos para mejores resultados</h3>
+            <ul>
+                <li>Buena iluminación</li>
+                <li>Marcador plano y sin reflejos</li>
+                <li>Mantén una distancia de 20-50cm</li>
+                <li>Mueve la cámara lentamente</li>
+            </ul>
+        </div>
+        
+        <div class="qr-section">
+            <h3>📲 Acceso rápido</h3>
+            <p>También puedes escanear este código QR desde tu celular:</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://192.168.0.12:8080" 
+                 alt="QR Code" style="background: white; padding: 10px; border-radius: 10px;">
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" style="background: #4CAF50; color: white; padding: 15px 30px; border-radius: 25px; text-decoration: none; font-size: 18px;">
+                🚀 Ir a la Demo AR
+            </a>
+        </div>
+    </div>
+</body>
+</html>
