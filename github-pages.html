@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR.js - GitHub Pages Optimizado</title>
+    
+    <!-- AR.js y A-Frame - Versiones específicas para GitHub Pages -->
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 1000;
+            max-width: 250px;
+            font-size: 12px;
+        }
+        
+        .overlay h3 {
+            margin: 0 0 8px 0;
+            color: #4CAF50;
+            font-size: 14px;
+        }
+        
+        .instructions {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 1000;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 2000;
+            text-align: center;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        #debugInfo {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #00ff00;
+            padding: 8px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 10px;
+            max-width: 200px;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de carga -->
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Inicializando AR...</p>
+        <p id="loadingStatus">Verificando cámara...</p>
+    </div>
+    
+    <!-- Info de estado -->
+    <div class="overlay">
+        <h3>🎯 AR.js</h3>
+        <p id="status">Iniciando...</p>
+        <p>Marcadores: <span id="markerCount">0</span></p>
+    </div>
+    
+    <!-- Debug info -->
+    <div id="debugInfo">
+        <div>FPS: <span id="fps">0</span></div>
+        <div>Cam: <span id="camStatus">---</span></div>
+        <div>AR: <span id="arStatus">---</span></div>
+    </div>
+    
+    <!-- Instrucciones minimalistas -->
+    <div class="instructions">
+        <strong>Apunta hacia el marcador Hiro</strong> - 
+        <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" 
+           target="_blank" style="color: #4CAF50;">Descargar</a>
+    </div>
+    
+    <!-- Escena AR optimizada -->
+    <a-scene
+        vr-mode-ui="enabled: false"
+        arjs="sourceType: webcam; 
+              videoTexture: true; 
+              debugUIEnabled: false; 
+              detectionMode: mono_and_matrix; 
+              matrixCodeType: 3x3;
+              trackingMethod: best;
+              maxDetectionRate: 30;
+              canvasWidth: 640;
+              canvasHeight: 480;
+              sourceWidth: 640;
+              sourceHeight: 480;"
+        renderer="logarithmicDepthBuffer: true; antialias: false; alpha: true; precision: mediump;"
+        embedded
+        loading-screen="enabled: false"
+        stats="false">
+        
+        <!-- Marcador AR simplificado -->
+        <a-marker
+            id="hiro-marker"
+            preset="hiro"
+            size="1"
+            smooth="true"
+            smoothCount="10"
+            smoothTolerance="0.01"
+            smoothThreshold="5">
+            
+            <!-- Objeto 3D simple pero llamativo -->
+            <a-box
+                position="0 0.5 0"
+                rotation="0 45 0"
+                color="#00ff88"
+                scale="1 1 1"
+                animation="property: rotation; to: 0 405 0; loop: true; dur: 4000; easing: linear"
+                material="transparent: false; shader: standard;">
+                
+                <!-- Cubo interior -->
+                <a-box
+                    position="0 0 0"
+                    scale="0.5 0.5 0.5"
+                    color="#ff4444"
+                    animation="property: rotation; to: 0 -405 0; loop: true; dur: 2000; easing: linear">
+                </a-box>
+            </a-box>
+            
+            <!-- Texto simple -->
+            <a-text
+                value="AR.js"
+                position="0 1.2 0"
+                align="center"
+                color="#ffffff"
+                scale="1.5 1.5 1.5"
+                animation="property: position; to: 0 1.5 0; dir: alternate; dur: 2000; loop: true;">
+            </a-text>
+            
+        </a-marker>
+        
+        <!-- Cámara -->
+        <a-entity camera look-controls-enabled="false" wasd-controls-enabled="false"></a-entity>
+    </a-scene>
+    
+    <script>
+        // Variables globales
+        let markerVisible = false;
+        let markerCount = 0;
+        let startTime = Date.now();
+        let frameCount = 0;
+        
+        // Elementos del DOM
+        const statusElement = document.getElementById('status');
+        const markerCountElement = document.getElementById('markerCount');
+        const loadingElement = document.getElementById('loading');
+        const loadingStatusElement = document.getElementById('loadingStatus');
+        const fpsElement = document.getElementById('fps');
+        const camStatusElement = document.getElementById('camStatus');
+        const arStatusElement = document.getElementById('arStatus');
+        
+        // Información inicial
+        console.log('🚀 AR.js GitHub Pages optimizado iniciado');
+        console.log('🌍 URL:', window.location.href);
+        console.log('🔒 HTTPS:', window.location.protocol === 'https:');
+        
+        // Inicialización con retraso para estabilidad
+        window.addEventListener('load', function() {
+            console.log('📄 Página cargada');
+            loadingStatusElement.textContent = 'Preparando AR...';
+            
+            setTimeout(() => {
+                initializeAR();
+            }, 1000);
+        });
+        
+        function initializeAR() {
+            console.log('🎯 Inicializando AR...');
+            
+            const scene = document.querySelector('a-scene');
+            const marker = document.querySelector('#hiro-marker');
+            
+            if (!scene || !marker) {
+                console.error('❌ Elementos AR no encontrados');
+                handleError('Elementos AR no encontrados');
+                return;
+            }
+            
+            // Eventos de la escena
+            scene.addEventListener('loaded', function() {
+                console.log('✅ Escena A-Frame cargada');
+                arStatusElement.textContent = 'Loaded';
+                loadingStatusElement.textContent = 'Activando cámara...';
+            });
+            
+            scene.addEventListener('renderstart', function() {
+                console.log('✅ Renderizado iniciado');
+                arStatusElement.textContent = 'Render';
+                setTimeout(() => {
+                    loadingElement.classList.add('hidden');
+                    statusElement.textContent = 'Busca el marcador Hiro';
+                }, 1500);
+            });
+            
+            // Eventos específicos de AR.js
+            window.addEventListener('arjs-video-loaded', function(e) {
+                console.log('✅ Video AR cargado:', e);
+                camStatusElement.textContent = 'OK';
+                arStatusElement.textContent = 'Video';
+                loadingStatusElement.textContent = 'Cámara activada!';
+            });
+            
+            window.addEventListener('camera-init', function(e) {
+                console.log('✅ Cámara inicializada:', e);
+                camStatusElement.textContent = 'Init';
+            });
+            
+            window.addEventListener('camera-error', function(e) {
+                console.error('❌ Error de cámara:', e);
+                handleError('Error de cámara: ' + (e.detail || 'Desconocido'));
+            });
+            
+            // Eventos del marcador
+            marker.addEventListener('markerFound', function() {
+                markerVisible = true;
+                markerCount++;
+                updateStatus();
+                console.log('✅ Marcador #' + markerCount + ' detectado!');
+                
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+            });
+            
+            marker.addEventListener('markerLost', function() {
+                markerVisible = false;
+                updateStatus();
+                console.log('❌ Marcador perdido');
+            });
+            
+            // Verificar cámara por separado
+            checkCameraAccess();
+            
+            // Iniciar monitor de FPS
+            startFPSMonitor();
+        }
+        
+        function checkCameraAccess() {
+            if (!navigator.mediaDevices?.getUserMedia) {
+                handleError('getUserMedia no soportado');
+                return;
+            }
+            
+            navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'environment',
+                    width: { ideal: 640, max: 1280 },
+                    height: { ideal: 480, max: 720 }
+                } 
+            })
+            .then(stream => {
+                console.log('✅ Permisos de cámara OK');
+                camStatusElement.textContent = 'Perms';
+                stream.getTracks().forEach(track => track.stop());
+            })
+            .catch(error => {
+                console.error('❌ Error permisos cámara:', error);
+                handleError('Sin acceso a cámara: ' + error.name);
+            });
+        }
+        
+        function updateStatus() {
+            if (markerVisible) {
+                statusElement.textContent = '🎯 ¡Marcador detectado!';
+                statusElement.style.color = '#4CAF50';
+            } else {
+                statusElement.textContent = '👀 Buscando marcador...';
+                statusElement.style.color = '#FF9800';
+            }
+            markerCountElement.textContent = markerCount;
+        }
+        
+        function handleError(message) {
+            console.error('❌', message);
+            statusElement.textContent = message;
+            statusElement.style.color = '#f44336';
+            loadingElement.classList.add('hidden');
+            camStatusElement.textContent = 'ERR';
+            arStatusElement.textContent = 'ERR';
+        }
+        
+        function startFPSMonitor() {
+            setInterval(() => {
+                frameCount++;
+                const elapsed = (Date.now() - startTime) / 1000;
+                const fps = Math.round(frameCount / elapsed);
+                fpsElement.textContent = fps;
+                
+                // Reset cada 10 segundos
+                if (elapsed > 10) {
+                    frameCount = 0;
+                    startTime = Date.now();
+                }
+            }, 1000);
+        }
+        
+        // Prevenir zoom en móviles
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // Manejo de errores globales
+        window.addEventListener('error', function(e) {
+            console.error('❌ Error global:', e.error?.message || e.message);
+        });
+        
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('❌ Promise rechazada:', e.reason);
+        });
+    </script>
+</body>
+</html>
