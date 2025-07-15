@@ -5,6 +5,8 @@ Demo de realidad aumentada usando AR.js que funciona en GitHub Pages.
 ## 🚀 Demos Disponibles
 
 ### Para GitHub Pages (HTTPS):
+- **🎯 Detección mejorada:** [deteccion-mejorada.html](./deteccion-mejorada.html) ⭐ **RECOMENDADO**
+- **📋 Guía de consejos:** [consejos.html](./consejos.html) 
 - **Versión optimizada:** [github-pages.html](./github-pages.html)
 - **Versión completa:** [index.html](./index.html)
 - **Instrucciones:** [instrucciones.html](./instrucciones.html)
@@ -32,6 +34,15 @@ Necesitas el **marcador Hiro** para que funcione:
 - Apunta la cámara hacia el marcador
 
 ## 🔧 Solución de Problemas
+
+### La cámara funciona pero no detecta el marcador:
+1. **Usa la versión mejorada** (`deteccion-mejorada.html`) - ⭐ **MEJOR OPCIÓN**
+2. **Distancia correcta**: 20-60cm del marcador
+3. **Buena iluminación**: Luz natural o lámpara (no flash directo)
+4. **Marcador plano**: Sin arrugas, reflejos o sombras
+5. **Centrar en pantalla**: El marcador debe estar completamente visible
+6. **Mantener estable**: 2-3 segundos sin mover
+7. **Tamaño adecuado**: El marcador debe ocupar ~1/4 de la pantalla
 
 ### La cámara se abre y se cierra:
 1. **Usar la versión optimizada** (`github-pages.html`)
@@ -64,6 +75,14 @@ http://TU_IP_LOCAL:8080
 
 ## 📋 Características
 
+### Detección Mejorada (deteccion-mejorada.html): ⭐
+- 🎯 **Detección ultra-sensible** del marcador Hiro
+- 🔍 **Debug visual en tiempo real** (FPS, confianza, iluminación)
+- 💡 **Consejos automáticos** para mejorar detección
+- 🎨 **Objetos 3D muy visibles** con múltiples colores
+- 📊 **Estadísticas de detección** en vivo
+- 🎉 **Feedback inmediato** cuando funciona
+
 ### Versión Completa (index.html):
 - ✨ Animaciones complejas
 - 🎨 Múltiples objetos 3D
@@ -72,9 +91,9 @@ http://TU_IP_LOCAL:8080
 
 ### Versión Optimizada (github-pages.html):
 - ⚡ Carga más rápida
-- 🎯 Detección más estable
+- 🎯 Detección estable
 - 📱 Mejor rendimiento en móviles
-- 🔍 Info de debug en tiempo real
+- 🔍 Info de debug básica
 
 ## 🌐 Deployment en GitHub Pages
 

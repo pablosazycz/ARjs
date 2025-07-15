@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consejos para Detección - AR.js</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .tip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .tip-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            text-align: center;
+        }
+        .tip-card.warning {
+            border-left-color: #FF9800;
+        }
+        .tip-card.error {
+            border-left-color: #f44336;
+        }
+        .marker-example {
+            width: 120px;
+            height: 120px;
+            margin: 10px auto;
+            border: 3px solid;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            position: relative;
+        }
+        .good { border-color: #4CAF50; background: rgba(76, 175, 80, 0.2); }
+        .bad { border-color: #f44336; background: rgba(244, 67, 54, 0.2); }
+        
+        .distance-demo {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .phone-icon {
+            width: 50px;
+            height: 80px;
+            background: #333;
+            border-radius: 8px;
+            position: relative;
+            margin: 10px;
+        }
+        .phone-icon::after {
+            content: '📱';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+        }
+        .distance-arrow {
+            font-size: 24px;
+            color: #4CAF50;
+        }
+        h1 { text-align: center; color: #fff; margin-bottom: 30px; }
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .demo-link {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .demo-link:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        .demo-link.primary {
+            background: #FF5722;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Guía para Detectar el Marcador AR</h1>
+        
+        <div class="demo-links">
+            <a href="deteccion-mejorada.html" class="demo-link primary">
+                🚀 Probar Demo con Detección Mejorada
+            </a>
+            <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" 
+               class="demo-link" target="_blank">
+                📥 Descargar Marcador Hiro
+            </a>
+        </div>
+        
+        <h2>📏 Distancia Correcta</h2>
+        <div class="distance-demo">
+            <div>
+                <div class="phone-icon"></div>
+                <div style="color: #f44336;">❌ Muy cerca<br>(&lt;15cm)</div>
+            </div>
+            <div class="distance-arrow">←</div>
+            <div>
+                <div class="phone-icon"></div>
+                <div style="color: #4CAF50;">✅ Perfecta<br>(20-60cm)</div>
+            </div>
+            <div class="distance-arrow">→</div>
+            <div>
+                <div class="phone-icon"></div>
+                <div style="color: #f44336;">❌ Muy lejos<br>(&gt;80cm)</div>
+            </div>
+        </div>
+        
+        <h2>🎯 Posicionamiento del Marcador</h2>
+        <div class="tip-grid">
+            <div class="tip-card">
+                <h3>✅ Correcto</h3>
+                <div class="marker-example good">
+                    <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" 
+                         style="width: 80px; height: 80px;">
+                </div>
+                <p>• Marcador plano<br>• Bien iluminado<br>• Centrado en pantalla<br>• Sin reflejos</p>
+            </div>
+            
+            <div class="tip-card warning">
+                <h3>⚠️ Cuidado</h3>
+                <div class="marker-example" style="border-color: #FF9800; background: rgba(255, 152, 0, 0.2); transform: rotate(15deg);">
+                    Inclinado
+                </div>
+                <p>• Marcador inclinado<br>• Parcialmente visible<br>• Con sombras<br>• Mal centrado</p>
+            </div>
+            
+            <div class="tip-card error">
+                <h3>❌ Incorrecto</h3>
+                <div class="marker-example bad">
+                    Borroso/Arrugado
+                </div>
+                <p>• Marcador arrugado<br>• Muy borroso<br>• Con reflejos<br>• Muy pequeño/grande</p>
+            </div>
+        </div>
+        
+        <h2>💡 Consejos de Iluminación</h2>
+        <div class="tip-grid">
+            <div class="tip-card">
+                <h3>☀️ Ideal</h3>
+                <p><strong>Luz natural difusa</strong><br>Cerca de una ventana sin sol directo</p>
+            </div>
+            <div class="tip-card">
+                <h3>💡 Buena</h3>
+                <p><strong>Luz artificial uniforme</strong><br>Lámpara de escritorio o techo</p>
+            </div>
+            <div class="tip-card warning">
+                <h3>⚠️ Evitar</h3>
+                <p><strong>Flash del celular</strong><br>Crea reflejos y sombras duras</p>
+            </div>
+        </div>
+        
+        <h2>📱 Técnica de Detección</h2>
+        <div class="tip-grid">
+            <div class="tip-card">
+                <h3>🎯 Paso 1</h3>
+                <p><strong>Posiciona el marcador</strong><br>Ponlo en una superficie plana y bien iluminada</p>
+            </div>
+            <div class="tip-card">
+                <h3>📱 Paso 2</h3>
+                <p><strong>Abre la demo</strong><br>Permite acceso a la cámara</p>
+            </div>
+            <div class="tip-card">
+                <h3>🎯 Paso 3</h3>
+                <p><strong>Apunta y centra</strong><br>El marcador debe llenar ~1/4 de la pantalla</p>
+            </div>
+            <div class="tip-card">
+                <h3>⏱️ Paso 4</h3>
+                <p><strong>Mantén estable</strong><br>Espera 2-3 segundos sin mover</p>
+            </div>
+        </div>
+        
+        <h2>🔍 Debugging</h2>
+        <div class="tip-grid">
+            <div class="tip-card">
+                <h3>📊 Monitor en tiempo real</h3>
+                <p>La demo mejorada muestra:</p>
+                <ul style="text-align: left; font-size: 14px;">
+                    <li>Estado de la cámara</li>
+                    <li>Detecciones realizadas</li>
+                    <li>Nivel de confianza</li>
+                    <li>FPS actual</li>
+                    <li>Calidad de iluminación</li>
+                </ul>
+            </div>
+            <div class="tip-card">
+                <h3>🔧 Si no funciona</h3>
+                <ol style="text-align: left; font-size: 14px;">
+                    <li>Revisa la consola del navegador (F12)</li>
+                    <li>Verifica permisos de cámara</li>
+                    <li>Prueba imprimir el marcador</li>
+                    <li>Cambia la iluminación</li>
+                    <li>Reinicia la página</li>
+                </ol>
+            </div>
+        </div>
+        
+        <h2>📋 Checklist de Detección</h2>
+        <div style="background: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <h3>Antes de empezar, verifica:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                <label style="display: flex; align-items: center;">
+                    <input type="checkbox" style="margin-right: 10px;"> 
+                    Marcador impreso en papel blanco
+                </label>
+                <label style="display: flex; align-items: center;">
+                    <input type="checkbox" style="margin-right: 10px;"> 
+                    Superficie plana y estable
+                </label>
+                <label style="display: flex; align-items: center;">
+                    <input type="checkbox" style="margin-right: 10px;"> 
+                    Buena iluminación ambiente
+                </label>
+                <label style="display: flex; align-items: center;">
+                    <input type="checkbox" style="margin-right: 10px;"> 
+                    Permisos de cámara activados
+                </label>
+                <label style="display: flex; align-items: center;">
+                    <input type="checkbox" style="margin-right: 10px;"> 
+                    Conexión HTTPS (GitHub Pages)
+                </label>
+                <label style="display: flex; align-items: center;">
+                    <input type="checkbox" style="margin-right: 10px;"> 
+                    Manos estables
+                </label>
+            </div>
+        </div>
+        
+        <div class="demo-links">
+            <a href="deteccion-mejorada.html" class="demo-link primary">
+                🎯 ¡Probar Ahora!
+            </a>
+            <a href="index.html" class="demo-link">Demo Completa</a>
+            <a href="github-pages.html" class="demo-link">Demo Básica</a>
+        </div>
+    </div>
+</body>
+</html>
